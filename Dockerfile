@@ -10,5 +10,5 @@ RUN clj -M -m cljs.main \
 
 FROM nginx:1-alpine
 
-COPY --from=build /app/out /usr/share/nginx/html/out
+COPY --from=build /app/out/main.js /usr/share/nginx/html/out/main.js
 COPY index.html /usr/share/nginx/html/
