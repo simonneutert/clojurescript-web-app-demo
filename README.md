@@ -34,15 +34,13 @@ well, if you thought [Elm](https://elm-lang.org/) was cool, but you struggled wi
 
 then open [http://localhost:8080](http://localhost:8080)
 
-## Pre-Conditions
+## Pre-Conditions (if you want to get your hands dirty 👏)
 
 - have [Clojure](https://clojure.org/guides/install_clojure) installed
 - skim this page: https://clojurescript.org/guides/quick-start
 - [curl](https://github.com/curl/curl)
 
-**optional**
-
-[VSCode with Calva](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) or a similar Editor supporting Clojure(-Script)
+_i code clojure in VS Code using_ [VSCode with Calva](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) or a similar Editor supporting Clojure(-Script)
 
 ## Compile the sources and view them
 
