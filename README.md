@@ -40,7 +40,7 @@ then open [http://localhost:8080](http://localhost:8080)
 - skim this page: https://clojurescript.org/guides/quick-start
 - [curl](https://github.com/curl/curl)
 
-_i code clojure in VS Code using_ [VSCode with Calva](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) or a similar Editor supporting Clojure(-Script)
+_I code clojure in VS Code using_ [VSCode with Calva](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) or a similar Editor supporting Clojure(-Script)
 
 ## Compile the sources and view them
 
