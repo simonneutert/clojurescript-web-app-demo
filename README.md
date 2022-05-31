@@ -1,14 +1,18 @@
 # fully functional everything clojurescript example
 
-I wanted to see how far I can push it having dabbled with Clojure/-Script for a few weeks after work.
+> When you walk to the edge of all the light you have and take that first step into the darkness of the unknown, you must believe that one of two things will happen. There will be something solid for you to stand upon or you will be taught to fly.”  
+> \- Patrick Overton, The leaning tree
 
-_**here's an example of an artisinal (most probably bad 🫠) NodeJS-independent Frontend Project😎**_
+---
 
-You may ask yourself:
+I wanted to see how far I can push it, having dabbled with Clojure/-Script for a few weeks after work.
 
-> **what's in for me learning clojure(-script?)**
+So, there you have it: _**an example of an artisinal (most probably bad 🫠) NodeJS-independent Frontend Project 🍻 😎**_
 
-well, if you though Elm was cool, but you struggled with the types... or think types hinder from greatness... Rich never said this, but I heard it anyways.
+> what's in for me learning clojure(-script?)  
+> \- everyone not writing lisp
+
+well, if you thought [Elm](https://elm-lang.org/) was cool, but you struggled with the types... or maybe you think types hinder from greatness... [Rich never said this](https://www.youtube.com/watch?v=2V1FtfBDsLU&t=2227s), but I heard it anyways in his talks.
 
 ## What you have at hand, when going through this codebase
 
