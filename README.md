@@ -25,7 +25,7 @@ well, if you though Elm was cool, but you struggled with the types... or think t
 
 ## Run with Docker 🐳
 
-`$ docker build . -t clj-events-spa`
+`$ docker build . -t clj-events-spa`  
 `$ docker run --rm -p 8080:80 clj-events-spa`
 
 then open [http://localhost:8080](http://localhost:8080)
