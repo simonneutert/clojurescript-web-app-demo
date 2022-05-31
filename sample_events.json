@@ -1,0 +1,27 @@
+[
+  {
+    "eventId": "144434",
+    "terminId": "228843",
+    "title": "Title",
+    "description": "<p>description</p>",
+    "description_plain": "description",
+    "imagePath": "https://test.test/test.jpg",
+    "venueTitle": "Location Title",
+    "venueStreet": "My Street 77",
+    "venueTown": "Cityname",
+    "venueZip": "55131",
+    "venueLat": "49.9942761",
+    "venueLng": "8.2724937",
+    "startTime": "1657735200",
+    "endTime": "1657670400",
+    "event_date_start": "13.Juli",
+    "event_date_end": "13.Juli",
+    "event_time_start": "18:00",
+    "event_time_end": "00:00",
+    "event_date_full": "Mi, 13.Juli 2022",
+    "event_start_calendar": "20220713T180000",
+    "event_end_calendar": "20220713T000000",
+    "rawCategory": "Vorträge / Literatur",
+    "categories": ["Bildung & Wissenschaft"]
+  }
+]

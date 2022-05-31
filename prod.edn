@@ -1,0 +1,2 @@
+{:closure-defines
+ {interactive-events-mainz.components.events/EVENTS_URL "https://prod.appframework.de/static_proxy/vrm_events_new.json"}}

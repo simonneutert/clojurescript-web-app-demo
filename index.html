@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    table {
+      width: 100%;
+    }
+
+    .table-expand {
+      margin-top: 5rem;
+    }
+
+    .table-expand td {
+      color: #8a8a8a;
+    }
+
+    .table-expand tr {
+      border: 1px solid #e6e6e6;
+    }
+
+    .table-expand .text-right {
+      padding-right: 3rem;
+    }
+
+    .table-expand-row.is-active .expand-icon::after {
+      content: '-';
+    }
+
+    .table-expand-row .expand-icon::after {
+      content: '+';
+      float: right;
+    }
+
+    .table-expand-row-content {
+      display: none;
+    }
+
+    .table-expand-row-content.is-active {
+      display: table-row;
+      -webkit-animation: fadeIn ease-in 1;
+      animation: fadeIn ease-in 1;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      -webkit-animation-duration: 0.5s;
+      animation-duration: 0.5s;
+    }
+
+    .table-expand-row-nested {
+      background-color: #e6e6e6;
+    }
+
+    @-webkit-keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="/out/main.js" type="text/javascript"></script>
+  <div id="app"></div>
+
+  <script>
+    Array.from(document.querySelectorAll('[data-open-details]'))
+      .forEach((elem) => {
+        elem.addEventListener('click', function (e) {
+          e.preventDefault();
+          const row = e.target.closest("tr")
+          row.classList.toggle('is-active');
+          row.nextElementSibling.classList.toggle('is-active')
+        }, false);
+      })
+  </script>
+</body>
+
+</html>
