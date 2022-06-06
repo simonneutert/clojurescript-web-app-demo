@@ -51,7 +51,8 @@
                 venueZip
                 venueTown
                 venueTitle]} event]
-    [[:tr.table-expand-row {:data-open-details true}
+    [[:tr.table-expand-row {:data-open-details true
+                            :style "cursor: pointer"}
       [:td
        [:span.event-date event_date_start " bis " event_date_end]
        [:br]
