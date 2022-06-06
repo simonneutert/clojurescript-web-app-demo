@@ -188,23 +188,25 @@
 
 (defn apply-filters-month!
   []
-  (state/update-events-showing! (apply-filters-month))
-  (rerender)
-  (apply-search!))
+  (let [events (apply-filters-month)]
+    (state/update-events-showing! events)
+    (rerender-events events)
+    (apply-search!)))
 
 (defn apply-filters-category!
   []
-  (let [cat-checked (categories-checked)
+  (let [cat-checked (categories-checked-with-default)
         last-checked-count (count (state/get-events-categories-selected))]
     (state/update-events-categories-selected! cat-checked)
 
-    (if (not= last-checked-count (categories-checked-count))
-      (->>
-       (apply-filters-month)
-       (filter #(contains? cat-checked (:rawCategory %)))
-       (state/update-events-showing!))
-      (state/update-events-showing! (apply-filters-month)))
-    (rerender)
+    (let [events (apply-filters-month)]
+      (if (not= last-checked-count (categories-checked-count))
+        (let [filtered-events (filter #(contains? cat-checked (:rawCategory %)) events)]
+          (state/update-events-showing! filtered-events)
+          (rerender-events filtered-events))
+        (do
+          (state/update-events-showing! events)
+          (rerender-events events))))
     (apply-search!)))
 
 (defn listen-categories-selected!
