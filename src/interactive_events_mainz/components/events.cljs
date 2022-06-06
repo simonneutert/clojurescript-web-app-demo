@@ -11,11 +11,32 @@
   (-> (helper/dom-element-by-id "events-categories")
       (.getElementsByTagName "input")))
 
+(defn elements-id-set
+  [elements]
+  (->> elements
+       (mapv #(.-id %))
+       (set)))
+
+(defn categories-checkboxes-ids
+  []
+  (->> (categories-checkboxes)
+       (elements-id-set)))
+
 (defn categories-checked
   []
   (->> (filterv #(= true (.-checked %)) (categories-checkboxes))
-       (mapv #(.-id %))
-       (set)))
+       (elements-id-set)))
+
+(defn categories-checked-count
+  []
+  (count (categories-checked)))
+
+(defn categories-checked-with-default
+  []
+  (let [cat-checked-count (categories-checked-count)]
+    (if (> cat-checked-count 0)
+      (categories-checked)
+      (categories-checkboxes-ids))))
 
 (defn event-component
   [event]
@@ -77,7 +98,6 @@
        (remove nil?)
        (sort-events-asc)))
 
-
 (defn listen-row-click
   []
   (let [elems (->>
@@ -124,6 +144,12 @@
   (-> (state/get-events-all)
       (list-of-events->hiccups)))
 
+(defn categories-checkboxes-changed?
+  [cat-checked last-checked]
+  (or
+   (= cat-checked 0)
+   (not= cat-checked last-checked)))
+
 (defn rerender
   []
   (helper/replace-inner-html
@@ -132,38 +158,66 @@
   (clear-table-events)
   (listen-row-click))
 
+(defn rerender-events
+  [events]
+  (helper/replace-inner-html
+   (helper/dom-element-by-id "events-list")
+   (html (list-of-events->hiccups events)))
+  (clear-table-events)
+  (listen-row-click))
+
+(defn apply-search!
+  []
+  (let [search-str (helper/read-value-of-dom-id "event-search-input")
+        events-showing (state/get-events-showing)]
+    (case (count search-str)
+      0 (rerender)
+      1 nil
+      2 nil
+      (->>
+       (filter #(clojure.string/includes? (.toLowerCase (str (select-keys % [:title :description :venueTitle]))) search-str) events-showing)
+       (rerender-events)))))
+
 (defn apply-filters-month
   []
   (let [month-int (helper/read-value-of-dom-id->int "event-month-select")
-        ccheked (categories-checked)]
+        cat-checked (categories-checked-with-default)]
     (if (= month-int 0)
-      (filter #(contains? ccheked (:rawCategory %)) (state/get-events-all))
-      (filter #(contains? ccheked (:rawCategory %)) (events-end-in-month (state/get-events-all) month-int)))))
+      (filter #(contains? cat-checked (:rawCategory %)) (state/get-events-all))
+      (filter #(contains? cat-checked (:rawCategory %)) (events-end-in-month (state/get-events-all) month-int)))))
 
 (defn apply-filters-month!
   []
   (state/update-events-showing! (apply-filters-month))
-  (rerender))
+  (rerender)
+  (apply-search!))
 
 (defn apply-filters-category!
   []
-  (let [ccheked (categories-checked)
-        last-checked (count (state/get-events-categories-selected))]
-    (state/update-events-categories-selected! (categories-checked))
-    (if (> (count (categories-checked)) last-checked)
+  (let [cat-checked (categories-checked)
+        last-checked-count (count (state/get-events-categories-selected))]
+    (state/update-events-categories-selected! cat-checked)
+
+    (if (not= last-checked-count (categories-checked-count))
       (->>
        (apply-filters-month)
+       (filter #(contains? cat-checked (:rawCategory %)))
        (state/update-events-showing!))
-      (->>
-       (state/get-events-showing)
-       (filter #(contains? ccheked (:rawCategory %)))
-       (state/update-events-showing!)))
-    (rerender)))
+      (state/update-events-showing! (apply-filters-month)))
+    (rerender)
+    (apply-search!)))
 
 (defn listen-categories-selected!
   []
   (doseq [checkbox (categories-checkboxes)]
     (.addEventListener checkbox "change" apply-filters-category! false)))
+
+(defn listen-search-input!
+  []
+  (.addEventListener (helper/dom-element-by-id "event-search-input")
+                     "keyup"
+                     apply-search!
+                     false))
 
 (defn listen-month-select!
   []
@@ -189,16 +243,23 @@
     (state/update-events-categories! (into #{} (map #(:rawCategory %) (state/get-events-all))))
     (rerender)
     (render-categories)
-    (listen-month-select!)))
+    (listen-month-select!)
+    (listen-search-input!)))
 
 (defn dom-skeleton
   []
-  (html [:label {:for "event-month-select"} "Monat wählen:"]
-        [:select#event-month-select
-         [:option {:value 0} "Zeige alle"]
-         (for [month (range 1 13)] [:option {:value month} (str month)])]
-        [:div#events-categories]
-        [:div#events-list]))
+  (html
+   [:div#events-search
+    [:label {:for "event-search"} "Suche:"]
+    [:input#event-search-input {:name "event-search" :placeholder "Suchen ..."}]]
+   [:label {:for "event-month-select"} "Monat wählen:"]
+   [:select#event-month-select
+    [:option {:value 0} "Zeige alle"]
+    (for [month (range 1 13)] [:option {:value month} (str month)])]
+   [:div
+    [:label "Kategorien:"]
+    [:div#events-categories]]
+   [:div#events-list]))
 
 (goog-define EVENTS_URL "http://localhost:9000/events.json")
 
