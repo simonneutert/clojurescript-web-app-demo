@@ -6,6 +6,8 @@
 
 (def now (helper/now))
 
+
+
 (defn categories-checkboxes
   []
   (-> (helper/dom-element-by-id "events-categories")
@@ -166,66 +168,96 @@
   (clear-table-events)
   (listen-row-click))
 
-(defn apply-search!
-  []
+(defn apply-search
+  [events-list]
   (let [search-str (helper/read-value-of-dom-id "event-search-input")
-        events-showing (state/get-events-showing)]
+        search-str-lower (clojure.string/lower-case search-str)]
     (case (count search-str)
-      0 (rerender)
-      1 nil
-      2 nil
-      (->>
-       (filter #(clojure.string/includes? (.toLowerCase (str (select-keys % [:title :description :venueTitle]))) search-str) events-showing)
-       (rerender-events)))))
+      0 events-list
+      1 events-list
+      2 events-list
+      (filter #(clojure.string/includes? (clojure.string/lower-case (str (select-keys % [:title :description :venueTitle]))) search-str-lower) events-list))))
 
 (defn apply-filters-month
   []
   (let [month-int (helper/read-value-of-dom-id->int "event-month-select")
-        cat-checked (categories-checked-with-default)]
+        cat-checked (categories-checked-with-default)
+        all-events (state/get-events-all)]
     (if (= month-int 0)
-      (filter #(contains? cat-checked (:rawCategory %)) (state/get-events-all))
-      (filter #(contains? cat-checked (:rawCategory %)) (events-end-in-month (state/get-events-all) month-int)))))
+      (filter #(contains? cat-checked (:rawCategory %)) all-events)
+      (filter #(contains? cat-checked (:rawCategory %)) (events-end-in-month all-events month-int)))))
 
 (defn apply-filters-month!
   []
   (let [events (apply-filters-month)]
     (state/update-events-showing! events)
-    (rerender-events events)
-    (apply-search!)))
+    events))
 
-(defn apply-filters-category!
+(defn apply-filters-category
   []
   (let [cat-checked (categories-checked-with-default)
         last-checked-count (count (state/get-events-categories-selected))]
     (state/update-events-categories-selected! cat-checked)
-
     (let [events (apply-filters-month)]
       (if (not= last-checked-count (categories-checked-count))
-        (let [filtered-events (filter #(contains? cat-checked (:rawCategory %)) events)]
-          (state/update-events-showing! filtered-events)
-          (rerender-events filtered-events))
-        (do
-          (state/update-events-showing! events)
-          (rerender-events events))))
-    (apply-search!)))
+        (filter #(contains? cat-checked (:rawCategory %)) events)
+        events))))
 
-(defn listen-categories-selected!
+(defn apply-filters-category!
   []
-  (doseq [checkbox (categories-checkboxes)]
-    (.addEventListener checkbox "change" apply-filters-category! false)))
+  (let [events (apply-filters-category)]
+    (state/update-events-showing! events)
+    events))
 
-(defn listen-search-input!
+(defn event-search-input-length
   []
-  (.addEventListener (helper/dom-element-by-id "event-search-input")
-                     "keyup"
-                     apply-search!
-                     false))
+  (let [counter (count (helper/read-value-of-dom-id "event-search-input"))
+        counter-int (js/parseInt counter)]
+    counter-int))
+
+(defn apply-search?
+  [from-length]
+  (> (event-search-input-length) from-length))
+
+(defn search-empty?
+  []
+  (= (event-search-input-length) 0))
+
+(defn apply-filter-chain!
+  [event-type]
+  (case event-type
+    "month" (->> (apply-filters-month!)
+                 apply-search
+                 rerender-events)
+    "category" (->> (apply-filters-category!)
+                    apply-search
+                    rerender-events)
+    "search" (do (when (apply-search? 2)
+                   (->> (state/get-events-showing)
+                        apply-search
+                        rerender-events))
+                 (when (search-empty?) (rerender-events (state/get-events-showing))))))
 
 (defn listen-month-select!
   []
   (.addEventListener (helper/dom-element-by-id "event-month-select")
                      "change"
-                     apply-filters-month!
+                     (fn [_event] (apply-filter-chain! "month"))
+                     false))
+
+(defn listen-categories-selected!
+  []
+  (doseq [checkbox (categories-checkboxes)]
+    (.addEventListener checkbox
+                       "change"
+                       (fn [_event] (apply-filter-chain! "category"))
+                       false)))
+
+(defn listen-search-input!
+  []
+  (.addEventListener (helper/dom-element-by-id "event-search-input")
+                     "keyup"
+                     (fn [_event] (apply-filter-chain! "search"))
                      false))
 
 (defn render-categories
