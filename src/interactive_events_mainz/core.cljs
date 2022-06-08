@@ -9,7 +9,7 @@
 
 (defn- app-component-layout []
   (->>
-   [:div
+   [:div.grid-container
     [:h1#title "Mainz Events"]
     [:div#events]]
    html))

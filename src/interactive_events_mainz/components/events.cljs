@@ -128,7 +128,7 @@
   [:table.table-expand
    [:thead
     [:tr.table-expand-row
-     [:th "Date"]
+     [:th {:width "180px"} "Date"]
      [:th "Content"]
      [:th "Location"]]]
    [:tbody body]])
@@ -265,9 +265,14 @@
   []
   (->>
    (html
-    (for [category (state/get-events-categories)]
-      [:div [:input {:type :checkbox :id category :name category :value category}]
-       [:label {:for category} category]]))
+    [:div.grid-container
+     [:fieldset.fieldset
+      [:legend "Kategorien"]
+      [:div.grid-x.grid-padding-x.small-up-1.medium-up-3.large-up-5
+       (for [category (state/get-events-categories)]
+         [:div.cell
+          [:input {:type :checkbox :id category :name category :value category}]
+          [:label {:for category} category]])]]])
    (helper/replace-inner-html (helper/dom-element-by-id "events-categories")))
   (listen-categories-selected!))
 
@@ -284,16 +289,18 @@
 (defn dom-skeleton
   []
   (html
-   [:div#events-search
-    [:label {:for "event-search"} "Suche:"]
-    [:input#event-search-input {:name "event-search" :placeholder "Suchen ..."}]]
-   [:label {:for "event-month-select"} "Monat wählen:"]
-   [:select#event-month-select
-    [:option {:value 0} "Zeige alle"]
-    (for [month (range 1 13)] [:option {:value month} (str month)])]
-   [:div
-    [:label "Kategorien:"]
-    [:div#events-categories]]
+   [:div.grid-x.grid-margin-x
+    [:div.cell.small-12.medium-6
+     [:div#events-search
+      [:label {:for "event-search-input"}
+       "Suche:"
+       [:input#event-search-input {:type "text" :name "event-search" :placeholder "Suchen ..."}]]]]
+    [:div.cell.small-12.medium-6
+     [:label {:for "event-month-select"} "Monat wählen:"]
+     [:select#event-month-select
+      [:option {:value 0} "Zeige alle"]
+      (for [month (range 1 13)] [:option {:value month} (str month)])]]]
+   [:div#events-categories]
    [:div#events-list]))
 
 (goog-define EVENTS_URL "http://localhost:9000/events.json")
