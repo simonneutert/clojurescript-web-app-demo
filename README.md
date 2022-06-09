@@ -37,7 +37,7 @@ then open [http://localhost:8080](http://localhost:8080)
 ## Pre-Conditions (if you want to get your hands dirty 👏)
 
 - have [Clojure](https://clojure.org/guides/install_clojure) installed
-- skim this page: https://clojurescript.org/guides/quick-start
+- skim this page about quick starting ClojureScript: https://clojurescript.org/guides/quick-start
 - [curl](https://github.com/curl/curl)
 
 _I code clojure in VS Code using_ [VSCode with Calva](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) or a similar Editor supporting Clojure(-Script)
