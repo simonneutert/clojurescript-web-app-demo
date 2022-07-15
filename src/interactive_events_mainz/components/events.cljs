@@ -6,8 +6,6 @@
 
 (def now (helper/now))
 
-
-
 (defn categories-checkboxes
   []
   (-> (helper/dom-element-by-id "events-categories")
@@ -88,11 +86,15 @@
         event-date-month-endtime (+ (.getMonth event-date) 1)]
     (or
      (= event-date-month-endtime month-int)
-     (and (< (js/parseInt (:startTime event)) now) (> event-date-month-endtime month-int)))))
+     (and
+      (< (js/parseInt (:startTime event)) now)
+      (> event-date-month-endtime month-int)))))
 
 (defn event-ends-in-month?
   [event ^number month-int]
-  (when (and (in-future? event) (in-month? event month-int)) event))
+  (when (and
+         (in-future? event)
+         (in-month? event month-int)) event))
 
 (defn events-end-in-month
   [events ^number month-int]
@@ -294,7 +296,9 @@
      [:div#events-search
       [:label {:for "event-search-input"}
        "Suche:"
-       [:input#event-search-input {:type "text" :name "event-search" :placeholder "Suchen ..."}]]]]
+       [:input#event-search-input {:type "text"
+                                   :name "event-search"
+                                   :placeholder "Suchen ..."}]]]]
     [:div.cell.small-12.medium-6
      [:label {:for "event-month-select"} "Monat wählen:"]
      [:select#event-month-select

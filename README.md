@@ -65,3 +65,10 @@ other may use [Python for that](https://docs.python.org/3/library/http.server.ht
 - clojure(-script) isn't witchcraft and has some really nice docs/api/reference
 - almost no dependencies needed 🤯
 - one language to rule them all
+
+## Development (with VSCode and Calva)
+
+- start a REPL `deps.edn + ClojureScript build for Browser`
+- a Browser will open, then
+- evaluate `core.cljs` line by line 
+- evaluate requirements in `events.cljs` and inspect the events in state
