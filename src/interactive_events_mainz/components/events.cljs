@@ -270,7 +270,7 @@
     [:div.grid-container
      [:fieldset.fieldset
       [:legend "Kategorien"]
-      [:div.grid-x.grid-padding-x.small-up-1.medium-up-3.large-up-5
+      [:div.grid-x.grid-padding-x.small-up-1.medium-up-2.large-up-4
        (for [category (state/get-events-categories)]
          [:div.cell
           [:input {:type :checkbox :id category :name category :value category}]
