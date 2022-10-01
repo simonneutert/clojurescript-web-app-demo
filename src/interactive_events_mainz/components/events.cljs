@@ -38,31 +38,33 @@
       (categories-checked)
       (categories-checkboxes-ids))))
 
-(defn event-component
-  [event]
-  (let [{:keys [title
-                description
-                event_time_start
-                event_time_end
-                event_date_start
-                event_date_end
-                venueZip
-                venueTown
-                venueTitle]} event]
-    [[:tr.table-expand-row {:data-open-details true
-                            :style "cursor: pointer"}
-      [:td
-       [:span.event-date event_date_start " bis " event_date_end]
-       [:br]
-       [:span.event-time event_time_start " bis " event_time_end " Uhr"]]
-      [:td title]
-      [:td
-       [:span.venue-title venueTitle]
-       [:span " "]
-       [:span.venue-zip "(" venueZip " " venueTown ")"]]]
-     [:tr.table-expand-row-content
-      [:td.table-expand-row-nested {:colspan 3}
-       [:p description]]]]))
+(def event-component
+  (memoize (fn [event]
+             (let [{:keys [title
+                           description
+                           event_time_start
+                           event_time_end
+                           event_date_start
+                           event_date_end
+                           venueZip
+                           venueTown
+                           venueTitle
+                           event_start_calendar
+                           event_end_calendar]} event]
+               [[:tr.table-expand-row {:data-open-details true
+                                       :style "cursor: pointer"}
+                 [:td
+                  [:span.event-date event_date_start " " (subs event_start_calendar 0 4) " bis " event_date_end " " (subs event_end_calendar 0 4)]]
+                 [:td title]]
+                [:tr.table-expand-row-content
+                 [:td.table-expand-row-nested {:colspan 3}
+                  [:p
+                   [:span.venue-title venueTitle]
+                   [:span " "]
+                   [:span.venue-zip "(" venueZip " " venueTown ")"]
+                   [:br]
+                   [:span.event-time event_time_start " bis " event_time_end " Uhr"]]
+                  [:p description]]]]))))
 
 (defn sort-events-asc
   [events]
@@ -131,8 +133,7 @@
    [:thead
     [:tr.table-expand-row
      [:th {:width "180px"} "Date"]
-     [:th "Content"]
-     [:th "Location"]]]
+     [:th "Content"]]]
    [:tbody body]])
 
 (defn list-of-events->hiccups
@@ -307,7 +308,7 @@
    [:div#events-categories]
    [:div#events-list]))
 
-(goog-define EVENTS_URL "http://localhost:9000/events.json")
+(goog-define EVENTS_URL "http://localhost:9000/sample_events.json")
 
 (defn init
   []
