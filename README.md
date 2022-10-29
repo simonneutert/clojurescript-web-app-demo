@@ -1,6 +1,10 @@
 # fully functional everything clojurescript example
 
-**What? An interactive event calendar for the city of Mainz, Germany**
+**What is this and what will I see, when I run the Dockerfile?**
+
+A simple, but interactive event calendar for the city of Mainz, Germany. With search and filters and xhr calls in the background and such ☮️
+
+---
 
 > When you walk to the edge of all the light you have and take that first step into the darkness of the unknown, you must believe that one of two things will happen. There will be something solid for you to stand upon or you will be taught to fly.”  
 > \- Patrick Overton, The leaning tree
