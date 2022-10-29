@@ -1,9 +1,11 @@
 # fully functional everything clojurescript example
 
+**What? An interactive event calendar for the city of Mainz, Germany**
+
 > When you walk to the edge of all the light you have and take that first step into the darkness of the unknown, you must believe that one of two things will happen. There will be something solid for you to stand upon or you will be taught to fly.”  
 > \- Patrick Overton, The leaning tree
 
----
+## Rationale
 
 I wanted to see how far I can push it, having dabbled with Clojure/-Script for a few weeks after work.
 
