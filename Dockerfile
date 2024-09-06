@@ -1,4 +1,4 @@
-FROM clojure:tools-deps-1.11.1.1113-slim-buster AS build
+FROM clojure:tools-deps-1.11.4.1474-bullseye-slim AS build
 
 WORKDIR /app
 COPY deps.edn prod.edn /app/
